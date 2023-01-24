@@ -9,7 +9,7 @@ def main():
     s3 = boto3.client('s3')
 
     result, continuation_token = reviews(
-    'com.opentecheng.android.webank',
+    'application-id',
     lang='it',
     country='it',
     sort=Sort.NEWEST,
@@ -20,14 +20,10 @@ def main():
     df = df.join(pd.DataFrame(df.pop('review').tolist()))
     print('Dataframe created')
 
-    # df.to_excel('scrape_result.xlsx')
-    # s3.upload_file('scrape_result.xlsx','scrape-results-webank','scrape_result.xlsx')
-    ## SAVE FILE DIRECTLY TO S3
-
     output = BytesIO()
     df.to_excel(output)
     output.seek(0)
-    s3.upload_fileobj(output, 'scrape-results-webank', 'scrape-result.xlsx')
+    s3.upload_fileobj(output, 'bucket-name', 'scrape-result.xlsx')
     print('Scraping results saved to S3')
 
 
